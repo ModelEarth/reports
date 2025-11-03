@@ -1,0 +1,61 @@
+Model,NAICS Code,Industry Name,Importance
+RFC,311812,Commercial Bakeries,0.1455
+RFC,311211,Flour Milling,0.1427
+RFC,112910,Apiculture,0.1301
+RFC,111199,All Other Grain Farming,0.125
+RFC,311513,Cheese Manufacturing,0.1101
+RFC,311520,Ice Cream and Frozen Dessert Manufacturing,0.1065
+RFC,311999,All Other Miscellaneous Food Manufacturing,0.0906
+RFC,311811,Retail Bakeries,0.0902
+RFC,311421,Fruit and Vegetable Canning,0.0792
+RFC,311991,Perishable Prepared Food Manufacturing,0.0654
+RFC,311111,Dog and Cat Food Manufacturing,0.0568
+RFC,311611,Animal (except Poultry) Slaughtering,0.0463
+RFC,237310,"Highway, Street, and Bridge Construction",0.0444
+RFC,311313,Beet Sugar Manufacturing,0.0326
+RFC,112210,Hog and Pig Farming,0.0283
+RFC,311340,Nonchocolate Confectionery Manufacturing,0.0281
+RFC,311920,Coffee and Tea Manufacturing,0.0242
+RFC,112111,Beef Cattle Ranching and Farming,0.0242
+RFC,112120,Dairy Cattle and Milk Production,0.0097
+RFC,236220,Commercial and Institutional Building Construction,0.0041
+XGBOOST,311340,Nonchocolate Confectionery Manufacturing,0.1563
+XGBOOST,112111,Beef Cattle Ranching and Farming,0.1549
+XGBOOST,237310,"Highway, Street, and Bridge Construction",0.1521
+XGBOOST,311812,Commercial Bakeries,0.1448
+XGBOOST,311520,Ice Cream and Frozen Dessert Manufacturing,0.1326
+XGBOOST,112120,Dairy Cattle and Milk Production,0.1206
+XGBOOST,311211,Flour Milling,0.1104
+XGBOOST,112910,Apiculture,0.0983
+XGBOOST,311611,Animal (except Poultry) Slaughtering,0.0741
+XGBOOST,236220,Commercial and Institutional Building Construction,0.0723
+XGBOOST,311920,Coffee and Tea Manufacturing,0.0602
+XGBOOST,311421,Fruit and Vegetable Canning,0.0583
+XGBOOST,111199,All Other Grain Farming,0.0473
+XGBOOST,311811,Retail Bakeries,0.0448
+XGBOOST,112210,Hog and Pig Farming,0.0413
+XGBOOST,311513,Cheese Manufacturing,0.0257
+XGBOOST,311111,Dog and Cat Food Manufacturing,0.0225
+XGBOOST,311991,Perishable Prepared Food Manufacturing,0.0156
+XGBOOST,311313,Beet Sugar Manufacturing,0.0121
+XGBOOST,311999,All Other Miscellaneous Food Manufacturing,0.0072
+LR,236220,Commercial and Institutional Building Construction,0.1155
+LR,112210,Hog and Pig Farming,0.1151
+LR,311611,Animal (except Poultry) Slaughtering,0.1135
+LR,311421,Fruit and Vegetable Canning,0.1064
+LR,311111,Dog and Cat Food Manufacturing,0.101
+LR,311513,Cheese Manufacturing,0.0906
+LR,311520,Ice Cream and Frozen Dessert Manufacturing,0.0867
+LR,311991,Perishable Prepared Food Manufacturing,0.0793
+LR,112111,Beef Cattle Ranching and Farming,0.0751
+LR,311999,All Other Miscellaneous Food Manufacturing,0.0636
+LR,311812,Commercial Bakeries,0.0575
+LR,111199,All Other Grain Farming,0.0542
+LR,112910,Apiculture,0.052
+LR,112120,Dairy Cattle and Milk Production,0.0503
+LR,311811,Retail Bakeries,0.0465
+LR,311920,Coffee and Tea Manufacturing,0.0463
+LR,311340,Nonchocolate Confectionery Manufacturing,0.0301
+LR,237310,"Highway, Street, and Bridge Construction",0.0296
+LR,311313,Beet Sugar Manufacturing,0.018
+LR,311211,Flour Milling,0.0171

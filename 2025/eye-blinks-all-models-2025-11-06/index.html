@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eye Blinks Detection - Multi-Model Comparison</title>
+    <link href="https://unpkg.com/tabulator-tables@5.5.0/dist/css/tabulator.min.css" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%);
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        header {
+            background: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        h1 { font-size: 2.5em; margin-bottom: 10px; }
+        .subtitle { font-size: 1.2em; opacity: 0.9; }
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            padding: 30px;
+            background: #f8f9fa;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .stat-card {
+            background: white;
+            padding: 20px 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            text-align: center;
+            min-width: 150px;
+        }
+        .stat-number { font-size: 2em; font-weight: bold; color: #2193b0; }
+        .stat-label { color: #666; margin-top: 5px; }
+        .section { padding: 40px; }
+        .section-title {
+            font-size: 2em;
+            margin-bottom: 20px;
+            color: #333;
+            border-bottom: 3px solid #2193b0;
+            padding-bottom: 10px;
+        }
+        .table-container {
+            margin: 30px 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        .viz-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .viz-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 12px rgba(0,0,0,0.15);
+        }
+        .viz-card img { width: 100%; height: auto; display: block; }
+        .viz-title {
+            padding: 20px;
+            background: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%);
+            color: white;
+            font-size: 1.3em;
+            font-weight: 600;
+        }
+        .tabulator { font-size: 14px; }
+        .tabulator-header {
+            background: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%);
+            color: white;
+        }
+        .tabulator-header .tabulator-col { background: transparent; border: none; }
+        .tabulator-row:hover { background: #e0f7fa !important; }
+        .footer { text-align: center; padding: 30px; background: #f8f9fa; color: #666; }
+        .info-box {
+            background: #e0f7fa;
+            border-left: 4px solid #00acc1;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        .winner {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Eye Blinks Detection - Multi-Model Comparison</h1>
+            <p class="subtitle">Testing 4 Models on EEG Brain Signals</p>
+            <p class="subtitle">Generated: 2025-11-06 18:08:08</p>
+        </header>
+
+        <div class="stats">
+            <div class="stat-card"><div class="stat-number">4</div><div class="stat-label">Models Tested</div></div>
+            <div class="stat-card"><div class="stat-number">94.29%</div><div class="stat-label">Best Accuracy</div></div>
+            <div class="stat-card"><div class="stat-number">14</div><div class="stat-label">Brain Voxels</div></div>
+            <div class="stat-card"><div class="stat-number">14,980</div><div class="stat-label">Samples</div></div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Winner: Random Bits Forest (RBF)</h2>
+            <div class="winner">
+                <p><strong>Champion Model:</strong> Random Bits Forest achieved 94.29% accuracy</p>
+                <p><strong>Runner-up:</strong> XGBoost with 90.22% accuracy (fastest training at 0.92s!)</p>
+                <p><strong>Third Place:</strong> Random Forest Classifier with 85.55% accuracy</p>
+                <p><strong>Key Insight:</strong> RBF excels at detecting complex patterns in brain signals, outperforming traditional ensemble methods by 4-9 percentage points.</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">About This Analysis</h2>
+            <div class="info-box">
+                <p><strong>Dataset:</strong> Eye Blinks Detection using EEG Brain Signals</p>
+                <p><strong>Features:</strong> 14 brain voxels (X1-X14) representing different regions of brain activity</p>
+                <p><strong>Target:</strong> Binary classification - Blink detected (1) or No blink (0)</p>
+                <p><strong>Models Tested:</strong> Random Bits Forest (RBF), XGBoost (XGB), Random Forest Classifier (RFC), Logistic Regression (LR)</p>
+                <p><strong>Goal:</strong> Compare model performance on brain signal classification to identify the best approach for real-time blink detection</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Model Performance Comparison</h2>
+            <p style="margin-bottom: 20px; color: #666;">Comprehensive metrics across all four models, sorted by accuracy.</p>
+            <div id="performance-table" class="table-container"></div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Performance Visualizations</h2>
+            <div class="gallery">
+                <div class="viz-card">
+                    <div class="viz-title">ROC Curves Comparison</div>
+                    <img src="roc_curves_comparison.png" alt="ROC Curves">
+                </div>
+                <div class="viz-card">
+                    <div class="viz-title">Confusion Matrices</div>
+                    <img src="confusion_matrices.png" alt="Confusion Matrices">
+                </div>
+                <div class="viz-card">
+                    <div class="viz-title">Training Time Comparison</div>
+                    <img src="training_time_comparison.png" alt="Training Time">
+                </div>
+                <div class="viz-card">
+                    <div class="viz-title">Metrics Dashboard</div>
+                    <img src="metrics_dashboard.png" alt="Metrics Dashboard">
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>Eye Blinks Multi-Model Comparison Dashboard</p>
+            <p style="margin-top: 10px;">Created by Akhila Guska</p>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/tabulator-tables@5.5.0/dist/js/tabulator.min.js"></script>
+    <script>
+        // Model Performance Table
+        var perfTable = new Tabulator("#performance-table", {
+            layout: "fitColumns",
+            pagination: false,
+            height: "auto",
+            columns: [
+                {title: "Model", field: "Model", width: 100},
+                {title: "Accuracy", field: "Accuracy", sorter: "number", hozAlign: "center"},
+                {title: "Precision", field: "Precision", sorter: "number", hozAlign: "center"},
+                {title: "Recall", field: "Recall", sorter: "number", hozAlign: "center"},
+                {title: "F1 Score", field: "F1 Score", sorter: "number", hozAlign: "center"},
+                {title: "ROC AUC", field: "ROC AUC", sorter: "number", hozAlign: "center"},
+                {title: "Training Time (s)", field: "Training Time (s)", sorter: "number", hozAlign: "center"}
+            ],
+        });
+
+        fetch('data/model_performance.csv')
+            .then(response => response.text())
+            .then(data => {
+                const lines = data.trim().split('\n');
+                const headers = lines[0].split(',');
+                const tableData = [];
+                for (let i = 1; i < lines.length; i++) {
+                    const values = lines[i].split(',');
+                    const row = {};
+                    headers.forEach((header, index) => { row[header] = values[index]; });
+                    tableData.push(row);
+                }
+                perfTable.setData(tableData);
+            })
+            .catch(error => console.error('Error loading model performance:', error));
+    </script>
+</body>
+</html>

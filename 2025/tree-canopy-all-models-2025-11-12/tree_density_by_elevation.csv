@@ -1,0 +1,6 @@
+Elevation_Zone,Total_Samples,Dense_Count,Dense_Ratio,Elevation_Min,Elevation_Max,Elevation_Avg,Dense_Percentage
+Very Low (<2500m),3540,208,0.06,1885,2500,2305.73,6.0
+Low (2500-2800m),8604,6740,0.78,2501,2800,2677.26,78.0
+Medium (2800-3100m),20846,20412,0.98,2801,3100,2963.17,98.0
+High (3100-3400m),16041,14791,0.92,3101,3400,3219.46,92.0
+Very High (>3400m),968,459,0.47,3401,3856,3467.62,47.0

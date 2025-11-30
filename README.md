@@ -2,8 +2,17 @@
 
 # ML Reports
 
-1. [Eye Blink Detection](https://model.earth/reports/2025/eye-blinks-rbf-2025-10-30/) - Oct 30, 2025
-Superstar report developer: Guska Akhila
+Report automation python and report templates by Akhila Guska
+
+- [Eye Blink Detection - Importance](https://model.earth/reports/2025/eye-blinks-rbf-2025-10-30/)
+
+- [Eye Blink Detection - Chart Colors](https://akhilaguska27.github.io/reports/2025/eye-blinks-all-models-2025-11-06/)
+
+- [Tree Canopy Analysis](https://akhilaguska27.github.io/reports/2025/tree-canopy-all-models-2025-11-12/)
+
+
+
+
 
 <!--
 [October 22, 22:09](https://model.earth/reports/2025/run-2025-10-22T17-10-59/)
@@ -23,3 +32,5 @@ Superstar report developer: Guska Akhila
 
 [View in GitHub](https://github.com/ModelEarth/reports/tree/main/2025)
 -->
+
+

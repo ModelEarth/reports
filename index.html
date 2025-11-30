@@ -16,6 +16,9 @@
 
 <script>
 loadMarkdown("README.md", "readmeDiv", "_parent");
+if (location.host.indexOf('localhost') >= 0) {
+  //loadMarkdown("details.md", "detailsDiv", "_parent");
+};
 </script>
 
 </head>
@@ -23,6 +26,7 @@ loadMarkdown("README.md", "readmeDiv", "_parent");
 <body>
 <div class="content contentpadding large-list">
   <div id="readmeDiv"></div>
+  <div id="detailsDiv"></div>
 </div>
 </body>
 </html>

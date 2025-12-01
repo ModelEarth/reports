@@ -4,6 +4,8 @@
 
 Report automation python and report templates by Akhila Guska
 
+- [Industry NAICS Categories - Importance](https://model.earth/reports/2025/run-2025-10-21T23-40-00/)
+
 - [Eye Blink Detection - Importance](https://model.earth/reports/2025/eye-blinks-rbf-2025-10-30/)
 
 - [Eye Blink Detection - Chart Colors](https://akhilaguska27.github.io/reports/2025/eye-blinks-all-models-2025-11-06/)

@@ -1,129 +1,149 @@
-// Auto-generate list of ML reports from GitHub
-function listReports() {
+/**
+ * List all reports from the reports repository
+ * Updated with fallback placeholder images
+ */
+function listReports(param) {
     const owner = 'ModelEarth';
     const repo = 'reports';
     const branch = 'main';
-    const year = '2025';
+    const reportsPath = '2025'; // Look in 2025 folder
     
-    console.log('[listReports] Fetching reports...');
-    $('#loadingMessage').show();
+    const apiURL = `https://api.github.com/repos/${owner}/${repo}/contents/${reportsPath}?ref=${branch}`;
     
     $.ajax({
-        url: `https://api.github.com/repos/${owner}/${repo}/git/trees/${branch}?recursive=1`,
+        url: apiURL,
         method: 'GET',
-        success: function(data) {
-            $('#loadingMessage').hide();
-            
-            const reportFolders = data.tree.filter(item => {
-                return item.type === 'tree' && 
-                       item.path.startsWith(`${year}/`) &&
-                       item.path.split('/').length === 2;
-            });
-            
-            console.log('[listReports] Found', reportFolders.length, 'reports');
-            
-            if (reportFolders.length === 0) {
-                $('#reportsList').html('<p>No reports found yet.</p>');
+        success: function(folders) {
+            if (!folders || folders.length === 0) {
+                $('#reportsGrid').html('<p>No reports found.</p>');
                 return;
             }
             
-            reportFolders.sort((a, b) => b.path.localeCompare(a.path));
-            reportFolders.forEach(folder => displayReport(folder.path, owner, repo, branch));
-        },
-        error: function(err) {
-            $('#loadingMessage').hide();
-            console.error('[listReports] Error:', err);
-            $('#reportsList').html('<p style="color:red;">Error loading reports.</p>');
-        }
-    });
-}
-
-function displayReport(folderPath, owner, repo, branch) {
-    $.ajax({
-        url: `https://api.github.com/repos/${owner}/${repo}/contents/${folderPath}?ref=${branch}`,
-        method: 'GET',
-        success: function(files) {
-            const folderName = folderPath.split('/')[1];
-            const reportUrl = `https://${owner.toLowerCase()}.github.io/${repo}/${folderPath}/`;
+            // Filter only directories
+            const reportFolders = folders.filter(item => item.type === 'dir');
             
-            const yamlFile = files.find(f => f.name.endsWith('.yaml') || f.name.endsWith('.yml'));
-            const dashboardImg = files.find(f => /dashboard\.png$/i.test(f.name));
-            const previewImg = dashboardImg || files.find(f => f.name.endsWith('.png'));
-            
-            let reportDate = 'Recent';
-            let reportTitle = folderName.replace(/_/g, ' ').replace(/-/g, ' ');
-            
-            const dateMatch = folderName.match(/(\d{4})-(\d{2})-(\d{2})/);
-            if (dateMatch) {
-                const [, year, month, day] = dateMatch;
-                reportDate = new Date(`${year}-${month}-${day}`).toLocaleDateString('en-US', {
-                    year: 'numeric', month: 'long', day: 'numeric'
-                });
+            if (reportFolders.length === 0) {
+                $('#reportsGrid').html('<p>No report folders found.</p>');
+                return;
             }
             
-            if (yamlFile) {
+            // Process each report folder
+            let processedCount = 0;
+            
+            reportFolders.forEach(folder => {
+                const folderName = folder.name;
+                const folderPath = folder.path;
+                const reportURL = `https://model.earth/reports/${folderPath}/`;
+                const githubURL = `https://github.com/${owner}/${repo}/tree/${branch}/${folderPath}`;
+                
+                // Fetch contents of each report folder to find preview image
                 $.ajax({
-                    url: yamlFile.download_url,
+                    url: folder.url,
                     method: 'GET',
-                    dataType: 'text',
-                    success: function(yamlContent) {
-                        const metadata = parseYAML(yamlContent);
-                        if (metadata.title) reportTitle = metadata.title;
-                        if (metadata.date) reportDate = metadata.date;
-                        renderCard(folderPath, reportUrl, previewImg, reportDate, reportTitle, metadata);
+                    success: function(files) {
+                        processedCount++;
+                        
+                        // Look for preview images (PNG, JPG, JPEG)
+                        const imageFiles = files.filter(file => 
+                            file.type === 'file' && 
+                            /\.(png|jpg|jpeg)$/i.test(file.name)
+                        );
+                        
+                        // Find the best preview image
+                        let previewImage = null;
+                        
+                        // Priority order for preview images
+                        const preferredNames = [
+                            'dashboard.png',
+                            'metrics_dashboard.png',
+                            'preview.png',
+                            'overview.png'
+                        ];
+                        
+                        // Check for preferred names first
+                        for (let prefName of preferredNames) {
+                            const found = imageFiles.find(img => 
+                                img.name.toLowerCase() === prefName.toLowerCase()
+                            );
+                            if (found) {
+                                previewImage = found.download_url;
+                                break;
+                            }
+                        }
+                        
+                        // If no preferred image, use first PNG/JPG found
+                        if (!previewImage && imageFiles.length > 0) {
+                            previewImage = imageFiles[0].download_url;
+                        }
+                        
+                        // FALLBACK: Use placeholder if no image found
+                        if (!previewImage) {
+                            // Create a nice placeholder with the report name
+                            const reportDisplayName = folderName
+                                .replace(/-/g, ' ')
+                                .replace(/\b\w/g, c => c.toUpperCase());
+                            
+                            previewImage = `https://via.placeholder.com/400x300/1e3a8a/ffffff?text=${encodeURIComponent(reportDisplayName)}`;
+                        }
+                        
+                        // Look for YAML metadata (optional)
+                        const yamlFile = files.find(file => 
+                            file.name === 'metadata.yaml' || file.name === 'metadata.yml'
+                        );
+                        
+                        // Create report card HTML
+                        const cardHTML = `
+                            <div class="report-card">
+                                <div class="report-image">
+                                    <img src="${previewImage}" alt="${folderName}" loading="lazy">
+                                </div>
+                                <div class="report-info">
+                                    <h3>${folderName}</h3>
+                                    ${yamlFile ? '<p class="metadata-available">📊 Metadata available</p>' : ''}
+                                    <div class="report-actions">
+                                        <a href="${reportURL}" target="_blank" class="btn-primary">View Report</a>
+                                        <a href="${githubURL}" target="_blank" class="btn-secondary">GitHub</a>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        
+                        $('#reportsGrid').append(cardHTML);
+                        
+                        // If this is the last folder, we're done
+                        if (processedCount === reportFolders.length) {
+                            console.log(`Loaded ${reportFolders.length} reports`);
+                        }
                     },
-                    error: function() {
-                        renderCard(folderPath, reportUrl, previewImg, reportDate, reportTitle, null);
+                    error: function(err) {
+                        console.error(`Error loading folder ${folderName}:`, err);
+                        processedCount++;
+                        
+                        // Still create a card even if we can't read the folder
+                        const cardHTML = `
+                            <div class="report-card">
+                                <div class="report-image">
+                                    <img src="https://via.placeholder.com/400x300/dc2626/ffffff?text=Error+Loading+Report" alt="${folderName}">
+                                </div>
+                                <div class="report-info">
+                                    <h3>${folderName}</h3>
+                                    <p style="color: #dc2626;">Unable to load report details</p>
+                                    <div class="report-actions">
+                                        <a href="${reportURL}" target="_blank" class="btn-primary">Try Viewing</a>
+                                        <a href="${githubURL}" target="_blank" class="btn-secondary">GitHub</a>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        
+                        $('#reportsGrid').append(cardHTML);
                     }
                 });
-            } else {
-                renderCard(folderPath, reportUrl, previewImg, reportDate, reportTitle, null);
-            }
+            });
+        },
+        error: function(err) {
+            console.error('Error fetching reports:', err);
+            $('#reportsGrid').html('<p style="color: #dc2626;">Error loading reports. Please try again later.</p>');
         }
     });
 }
-
-function parseYAML(yamlText) {
-    const metadata = {};
-    yamlText.split('\n').forEach(line => {
-        const match = line.match(/^([^:#]+):\s*(.+)$/);
-        if (match) {
-            metadata[match[1].trim()] = match[2].trim().replace(/['"]/g, '');
-        }
-    });
-    return metadata;
-}
-
-function renderCard(folderPath, reportUrl, previewImg, reportDate, reportTitle, metadata) {
-    let previewHTML = '';
-    if (previewImg) {
-        const imgUrl = `https://raw.githubusercontent.com/ModelEarth/reports/main/${folderPath}/${previewImg.name}`;
-        previewHTML = `<div class="report-preview"><img src="${imgUrl}" alt="${reportTitle}" loading="lazy"></div>`;
-    }
-    
-    let metaHTML = '';
-    if (metadata) {
-        if (metadata.models) metaHTML += `<div class="report-models">Models: ${metadata.models}</div>`;
-        if (metadata.best_accuracy) metaHTML += `<div class="report-accuracy">Best: ${metadata.best_accuracy}</div>`;
-        if (metadata.analyst) metaHTML += `<div class="report-analyst">By: ${metadata.analyst}</div>`;
-    }
-    
-    const cardHTML = `
-        <div class="report-card">
-            ${previewHTML}
-            <div class="report-content">
-                <h3><a href="${reportUrl}" target="_blank">${reportTitle}</a></h3>
-                <div class="report-date">📅 ${reportDate}</div>
-                ${metaHTML}
-                <div class="report-links">
-                    <a href="${reportUrl}" class="btn-primary" target="_blank">View Report</a>
-                    <a href="https://github.com/ModelEarth/reports/tree/main/${folderPath}" class="btn-secondary" target="_blank">GitHub</a>
-                </div>
-            </div>
-        </div>
-    `;
-    
-    $('#reportsList').append(cardHTML);
-}
-
-$(document).ready(function() { listReports(); });

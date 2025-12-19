@@ -201,5 +201,17 @@
     
     <!-- Load the auto-list script -->
     <script src="listReports.js"></script>
+    
+    <!-- Initialize and call the function -->
+    <script>
+    $(document).ready(function() {
+        // Show loading message
+        $('#loadingMessage').show();
+        // Clear any existing content
+        $('#reportsList').html('');
+        // Call the listReports function
+        listReports({});
+    });
+    </script>
 </body>
 </html>

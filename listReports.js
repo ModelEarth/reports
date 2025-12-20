@@ -15,7 +15,7 @@ function listReports(param) {
         method: 'GET',
         success: function(folders) {
             if (!folders || folders.length === 0) {
-                $('#reportsGrid').html('<p>No reports found.</p>');
+                $('#reportsList').html('<p>No reports found.</p>');
                 return;
             }
             
@@ -25,7 +25,7 @@ function listReports(param) {
             });
             
             if (reportFolders.length === 0) {
-                $('#reportsGrid').html('<p>No report folders found.</p>');
+                $('#reportsList').html('<p>No report folders found.</p>');
                 return;
             }
             
@@ -108,7 +108,7 @@ function listReports(param) {
                             '</div>' +
                         '</div>';
                         
-                        $('#reportsGrid').append(cardHTML);
+                        $('#reportsList').append(cardHTML);
                         
                         // If this is the last folder, we're done
                         if (processedCount === reportFolders.length) {
@@ -134,14 +134,14 @@ function listReports(param) {
                             '</div>' +
                         '</div>';
                         
-                        $('#reportsGrid').append(cardHTML);
+                        $('#reportsList').append(cardHTML);
                     }
                 });
             });
         },
         error: function(err) {
             console.error('Error fetching reports:', err);
-            $('#reportsGrid').html('<p style="color: #dc2626;">Error loading reports. Please try again later.</p>');
+            $('#reportsList').html('<p style="color: #dc2626;">Error loading reports. Please try again later.</p>');
         }
     });
 }

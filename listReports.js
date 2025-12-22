@@ -19,10 +19,10 @@ function listReports(param) {
                 return;
             }
             
-            // Filter only directories
-            var reportFolders = folders.filter(function(item) {
-                return item.type === 'dir';
-            });
+            // Filter only directories with "all-models" in the name
+var reportFolders = folders.filter(function(item) {
+    return item.type === 'dir' && item.name.indexOf('all-models') !== -1;
+});
             
             if (reportFolders.length === 0) {
                 $('#reportsList').html('<p>No report folders found.</p>');

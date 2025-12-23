@@ -15,16 +15,18 @@ function listReports(param) {
         method: 'GET',
         success: function(folders) {
             if (!folders || folders.length === 0) {
+                $('#loadingMessage').hide();
                 $('#reportsList').html('<p>No reports found.</p>');
                 return;
             }
             
-            // Filter only directories
+            // Filter only directories with "all-models" in the name
             var reportFolders = folders.filter(function(item) {
-                return item.type === 'dir';
+                return item.type === 'dir' && item.name.indexOf('all-models') !== -1;
             });
             
             if (reportFolders.length === 0) {
+                $('#loadingMessage').hide();
                 $('#reportsList').html('<p>No report folders found.</p>');
                 return;
             }
@@ -110,8 +112,9 @@ function listReports(param) {
                         
                         $('#reportsList').append(cardHTML);
                         
-                        // If this is the last folder, we're done
+                        // If this is the last folder, hide loading message
                         if (processedCount === reportFolders.length) {
+                            $('#loadingMessage').hide();
                             console.log('Loaded ' + reportFolders.length + ' reports');
                         }
                     },
@@ -135,13 +138,20 @@ function listReports(param) {
                         '</div>';
                         
                         $('#reportsList').append(cardHTML);
+                        
+                        // If this is the last folder, hide loading message
+                        if (processedCount === reportFolders.length) {
+                            $('#loadingMessage').hide();
+                        }
                     }
                 });
             });
         },
         error: function(err) {
             console.error('Error fetching reports:', err);
+            $('#loadingMessage').hide();
             $('#reportsList').html('<p style="color: #dc2626;">Error loading reports. Please try again later.</p>');
         }
     });
 }
+

@@ -31,6 +31,27 @@
             line-height: 1.6;
         }
         
+        /* Toggle button styles */
+        .toggle-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        #toggleFilter {
+            padding: 10px 20px;
+            background-color: #1e3a8a;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        
+        #toggleFilter:hover {
+            background-color: #1e40af;
+        }
+        
         #reportsList {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
@@ -60,8 +81,10 @@
         
         .report-preview img {
             width: 100%;
-            height: 100%;
-            object-fit: cover;
+            max-height: 200px;
+            height: auto;
+            object-fit: contain;
+            display: block;
         }
         
         .report-content {
@@ -193,6 +216,11 @@
                 Each report compares multiple ML algorithms (Random Forest, XGBoost, Logistic Regression, SVM) 
                 with interactive visualizations, performance metrics, and detailed analysis.
             </p>
+        </div>
+        
+        <!-- Toggle button for showing all reports -->
+        <div class="toggle-container">
+            <button id="toggleFilter" onclick="toggleReports()">Show All Reports</button>
         </div>
         
         <div class="loading" id="loadingMessage">Loading reports</div>

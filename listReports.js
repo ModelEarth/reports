@@ -123,13 +123,16 @@ function listReports(param) {
                             return file.name === 'metadata.yaml' || file.name === 'metadata.yml';
                         });
                         
+                        // Escape folder name for safe HTML insertion
+                        var safeFolderName = folderName.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+                        
                         // Create report card HTML
                         var cardHTML = '<div class="report-card">' +
                             '<div class="report-preview">' +
-                                '<img src="' + previewImage + '" alt="' + folderName + '" loading="lazy">' +
+                                '<img src="' + previewImage + '" alt="Report preview" loading="lazy">' +
                             '</div>' +
                             '<div class="report-content">' +
-                                '<h3>' + folderName + '</h3>' +
+                                '<h3>' + safeFolderName + '</h3>' +
                                 (yamlFile ? '<p class="metadata-available">📊 Metadata available</p>' : '') +
                                 '<div class="report-links">' +
                                     '<a href="' + reportURL + '" target="_blank" class="btn-primary">View Report</a>' +
@@ -150,13 +153,16 @@ function listReports(param) {
                         console.error('Error loading folder ' + folderName + ':', err);
                         processedCount++;
                         
+                        // Escape folder name for safe HTML insertion
+                        var safeFolderName = folderName.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+                        
                         // Still create a card even if we can't read the folder
                         var cardHTML = '<div class="report-card">' +
                             '<div class="report-preview">' +
-                                '<img src="https://via.placeholder.com/400x300/dc2626/ffffff?text=Error+Loading+Report" alt="' + folderName + '">' +
+                                '<img src="https://via.placeholder.com/400x300/dc2626/ffffff?text=Error+Loading+Report" alt="Error loading report">' +
                             '</div>' +
                             '<div class="report-content">' +
-                                '<h3>' + folderName + '</h3>' +
+                                '<h3>' + safeFolderName + '</h3>' +
                                 '<p style="color: #dc2626;">Unable to load report details</p>' +
                                 '<div class="report-links">' +
                                     '<a href="' + reportURL + '" target="_blank" class="btn-primary">Try Viewing</a>' +
@@ -182,73 +188,3 @@ function listReports(param) {
         }
     });
 }
-```
-
----
-
-## **✅ WHAT'S CHANGED:**
-
-### **index.html:**
-1. ✅ **Added toggle button** with styling
-2. ✅ **Added max-height: 200px** to `.report-preview img`
-3. ✅ **Changed class names** to match: `report-preview`, `report-content`, `report-links`
-4. ✅ **Added object-fit: contain** for proper image scaling
-
-### **listReports.js:**
-1. ✅ **Added global variable** `showAllReports`
-2. ✅ **Added toggleReports() function** with button color/text changes
-3. ✅ **Modified filter logic** to respect toggle state
-4. ✅ **Updated class names** to match HTML: `report-preview`, `report-content`, `report-links`
-
----
-
-## **🎯 HOW IT WORKS:**
-
-**Default state:**
-- Shows only 2 "all-models" reports
-- Button says "Show All Reports" (blue)
-
-**After clicking:**
-- Shows ALL reports (including test runs)
-- Button says "Show Main Reports Only" (red)
-- Click again to go back to filtered view
-
-**Image sizing:**
-- All preview images limited to 200px max height
-- Maintains aspect ratio with object-fit: contain
-
----
-
-## **📋 CREATE PR #12:**
-
-**Branch name:** `add-show-all-toggle`
-
-**Commit message for index.html:**
-```
-Add Show All toggle button and limit preview image height to 200px
-```
-
-**Commit message for listReports.js:**
-```
-Add toggle functionality for Show All Reports feature
-```
-
-**PR Title:**
-```
-Add "Show All" toggle and limit preview image height
-```
-
-**PR Description:**
-```
-Implements requested features:
-
-1. Added "Show All Reports" toggle button
-   - Default: Shows only all-models reports
-   - Click: Shows all reports including test runs
-   - Button changes color and text based on state
-
-2. Set max-height of 200px on preview images
-   - Prevents oversized displays
-   - Uses object-fit: contain for proper scaling
-
-Tested and working correctly.

@@ -1,2 +1,0 @@
-Model,Accuracy,ROC_AUC,F1_Score,Precision,Recall,GMean,Training_Time_Seconds
-rbf,0.7333,0.5341,0.0,0.0,0.0,0.0,2.75

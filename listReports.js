@@ -108,14 +108,22 @@ function listReports(param) {
                             previewImage = imageFiles[0].download_url;
                         }
                         
-                        // FALLBACK: Use placeholder if no image found
+                        // FALLBACK: Use inline SVG placeholder if no image found
                         if (!previewImage) {
                             // Create a nice placeholder with the report name
                             var reportDisplayName = folderName
                                 .replace(/-/g, ' ')
                                 .replace(/\b\w/g, function(c) { return c.toUpperCase(); });
                             
-                            previewImage = 'https://via.placeholder.com/400x300/1e3a8a/ffffff?text=' + encodeURIComponent(reportDisplayName);
+                            // Create inline SVG placeholder (always works, no external dependencies)
+                            var svgText = reportDisplayName.length > 30 ? reportDisplayName.substring(0, 27) + '...' : reportDisplayName;
+                            previewImage = 'data:image/svg+xml,' + encodeURIComponent(
+                                '<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300">' +
+                                '<rect width="400" height="300" fill="#1e3a8a"/>' +
+                                '<text x="200" y="140" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="18" font-weight="bold">ML Report</text>' +
+                                '<text x="200" y="170" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="12">' + svgText + '</text>' +
+                                '</svg>'
+                            );
                         }
                         
                         // Look for YAML metadata (optional)
@@ -156,10 +164,19 @@ function listReports(param) {
                         // Escape folder name for safe HTML insertion
                         var safeFolderName = folderName.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
                         
+                        // Create inline SVG error placeholder
+                        var errorPlaceholder = 'data:image/svg+xml,' + encodeURIComponent(
+                            '<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300">' +
+                            '<rect width="400" height="300" fill="#dc2626"/>' +
+                            '<text x="200" y="140" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="18" font-weight="bold">Error</text>' +
+                            '<text x="200" y="170" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="12">Unable to Load Report</text>' +
+                            '</svg>'
+                        );
+                        
                         // Still create a card even if we can't read the folder
                         var cardHTML = '<div class="report-card">' +
                             '<div class="report-preview">' +
-                                '<img src="https://via.placeholder.com/400x300/dc2626/ffffff?text=Error+Loading+Report" alt="Error loading report">' +
+                                '<img src="' + errorPlaceholder + '" alt="Error loading report">' +
                             '</div>' +
                             '<div class="report-content">' +
                                 '<h3>' + safeFolderName + '</h3>' +

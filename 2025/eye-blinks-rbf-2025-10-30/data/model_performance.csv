@@ -1,2 +1,0 @@
-Model,Accuracy,F1 Score,Precision,Recall,ROC AUC,G-Mean,Training Time (s)
-RBF,0.9429,0.9400,0.9400,0.9400,0.9856,0.9400,241.19

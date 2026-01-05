@@ -1,2 +1,0 @@
-Model,Accuracy,ROC_AUC,F1_Score,Precision,Recall,GMean,Training_Time_Seconds
-xgboost,0.9863,0.973,0.9474,1.0,0.9,0.9487,75.3

@@ -28,41 +28,89 @@ function listReports(param) {
     var owner = 'ModelEarth';
     var repo = 'reports';
     var branch = 'main';
-    var reportsPath = '2025'; // Look in 2025 folder
-    
-    var apiURL = 'https://api.github.com/repos/' + owner + '/' + repo + '/contents/' + reportsPath + '?ref=' + branch;
-    
+
+    // List the repo root, find year folders, then show report folders within each year
+    var rootURL = 'https://api.github.com/repos/' + owner + '/' + repo + '/contents?ref=' + branch;
+
     $.ajax({
-        url: apiURL,
+        url: rootURL,
         method: 'GET',
-        success: function(folders) {
-            if (!folders || folders.length === 0) {
+        success: function(rootItems) {
+            if (!rootItems || rootItems.length === 0) {
                 $('#loadingMessage').hide();
                 $('#reportsList').html('<p>No reports found.</p>');
                 return;
             }
-            
-            // Filter directories based on toggle state
-            var reportFolders = folders.filter(function(item) {
-                if (showAllReports) {
-                    // Show all directories
-                    return item.type === 'dir';
-                } else {
-                    // Show only "all-models" directories
-                    return item.type === 'dir' && item.name.indexOf('all-models') !== -1;
-                }
+
+            // Keep only top-level folders whose name is a year (e.g. 2025, 2026)
+            var yearFolders = rootItems.filter(function(item) {
+                return item.type === 'dir' && /^\d{4}$/.test(item.name);
             });
-            
-            if (reportFolders.length === 0) {
+
+            if (yearFolders.length === 0) {
                 $('#loadingMessage').hide();
-                $('#reportsList').html('<p>No report folders found.</p>');
+                var isLocalhost = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+                var notFoundMsg = 'No year folders found.';
+                if (isLocalhost) {
+                    notFoundMsg += ' (' + rootURL + ')';
+                }
+                $('#reportsList').html('<p>' + notFoundMsg + '</p>');
                 return;
             }
-            
-            // Process each report folder
-            var processedCount = 0;
-            
-            reportFolders.forEach(function(folder) {
+
+            // Show most recent years first
+            yearFolders.sort(function(a, b) { return b.name.localeCompare(a.name); });
+
+            // Fetch each year's contents, gather report folders, then render together
+            var allReportFolders = [];
+            var yearsProcessed = 0;
+
+            yearFolders.forEach(function(yearFolder) {
+                $.ajax({
+                    url: yearFolder.url,
+                    method: 'GET',
+                    success: function(folders) {
+                        var reportFolders = (folders || []).filter(function(item) {
+                            // Show all report directories within the year, except "verification"
+                            return item.type === 'dir' && item.name !== 'verification';
+                            // Previously filtered to "all-models" directories only:
+                            // return item.type === 'dir' && item.name.indexOf('all-models') !== -1;
+                        });
+                        allReportFolders = allReportFolders.concat(reportFolders);
+                    },
+                    complete: function() {
+                        yearsProcessed++;
+                        if (yearsProcessed === yearFolders.length) {
+                            renderReportFolders(allReportFolders);
+                        }
+                    }
+                });
+            });
+        },
+        error: function(err) {
+            console.error('Error fetching reports:', err);
+            $('#loadingMessage').hide();
+            $('#reportsList').html('<p style="color: #dc2626;">Error loading reports. Please try again later.</p>');
+        }
+    });
+
+    // Render report cards for the gathered folders across all years
+    function renderReportFolders(reportFolders) {
+        if (reportFolders.length === 0) {
+            $('#loadingMessage').hide();
+            var isLocalhost = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+            var notFoundMsg = 'No report folders found.';
+            if (isLocalhost) {
+                notFoundMsg += ' (' + rootURL + ')';
+            }
+            $('#reportsList').html('<p>' + notFoundMsg + '</p>');
+            return;
+        }
+
+        // Process each report folder
+        var processedCount = 0;
+
+        reportFolders.forEach(function(folder) {
                 var folderName = folder.name;
                 var folderPath = folder.path;
                 var reportURL = 'https://model.earth/reports/' + folderPath + '/';
@@ -143,7 +191,7 @@ function listReports(param) {
                                 '<h3>' + safeFolderName + '</h3>' +
                                 (yamlFile ? '<p class="metadata-available">📊 Metadata available</p>' : '') +
                                 '<div class="report-links">' +
-                                    '<a href="' + reportURL + '" target="_blank" class="btn-primary">View Report</a>' +
+                                    '<a href="' + reportURL + '" class="btn-primary">View Report</a>' +
                                     '<a href="' + githubURL + '" target="_blank" class="btn-secondary">GitHub</a>' +
                                 '</div>' +
                             '</div>' +
@@ -182,7 +230,7 @@ function listReports(param) {
                                 '<h3>' + safeFolderName + '</h3>' +
                                 '<p style="color: #dc2626;">Unable to load report details</p>' +
                                 '<div class="report-links">' +
-                                    '<a href="' + reportURL + '" target="_blank" class="btn-primary">Try Viewing</a>' +
+                                    '<a href="' + reportURL + '" class="btn-primary">Try Viewing</a>' +
                                     '<a href="' + githubURL + '" target="_blank" class="btn-secondary">GitHub</a>' +
                                 '</div>' +
                             '</div>' +
@@ -197,11 +245,5 @@ function listReports(param) {
                     }
                 });
             });
-        },
-        error: function(err) {
-            console.error('Error fetching reports:', err);
-            $('#loadingMessage').hide();
-            $('#reportsList').html('<p style="color: #dc2626;">Error loading reports. Please try again later.</p>');
         }
-    });
-}
+    }

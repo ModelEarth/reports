@@ -1,0 +1,12 @@
+{
+  "files": [
+    "README.md",
+    "TREE_CANOPY_REPORT.md",
+    "tree_canopy_dashboard.png",
+    "tree_canopy_model_metrics.csv",
+    "tree_canopy_roc_curves.png",
+    "tree_density_by_aspect.csv",
+    "tree_density_by_elevation.csv",
+    "tree_density_by_slope.csv"
+  ]
+}

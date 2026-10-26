@@ -113,7 +113,7 @@ function listReports(param) {
         reportFolders.forEach(function(folder) {
                 var folderName = folder.name;
                 var folderPath = folder.path;
-                var reportURL = 'https://model.earth/reports/' + folderPath + '/';
+                var reportURL = folderPath + '/'; // Relative to reports/index.html, so localhost links stay local
                 var githubURL = 'https://github.com/' + owner + '/' + repo + '/tree/' + branch + '/' + folderPath;
                 
                 // Fetch contents of each report folder to find preview image

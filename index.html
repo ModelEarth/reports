@@ -155,6 +155,14 @@
         .btn-secondary:hover {
             background: #e9ecef;
         }
+
+        /* localsite.js adds base.css after these styles, giving .btn-secondary its background, and base.css's
+           .content link color would otherwise turn the GitHub button's text blue */
+        #reportsList a.btn-secondary:link,
+        #reportsList a.btn-secondary:visited,
+        #reportsList a.btn-secondary:hover {
+            color: #fff;
+        }
         
         .loading {
             text-align: center;

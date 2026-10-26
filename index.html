@@ -33,8 +33,14 @@
         
         /* Toggle button styles */
         .toggle-container {
-            text-align: center;
-            margin: 20px 0;
+            text-align: left;
+            margin: 40px 0 20px;
+            padding-top: 30px;
+            border-top: 1px solid #dee2e6;
+        }
+
+        .dark .toggle-container {
+            border-top-color: #555;
         }
         
         #toggleFilter {
@@ -67,6 +73,11 @@
             transition: transform 0.2s, box-shadow 0.2s;
         }
         
+        /* Reports without charts show only after Show All Reports */
+        #reportsList:not(.show-all) .report-no-charts {
+            display: none;
+        }
+
         .report-card:hover {
             transform: translateY(-4px);
             box-shadow: 0 8px 24px rgba(0,0,0,0.12);
@@ -185,6 +196,11 @@
         .dark .report-card {
             background: #313131;
         }
+
+        /* The light area behind a thumbnail stands out on the dark card, so round its bottom corners too */
+        .dark .report-preview {
+            border-radius: 0 0 12px 12px;
+        }
         
         .dark h1,
         .dark .report-content h3 {
@@ -226,13 +242,13 @@
             </p>
         </div>
         
-        <!-- Toggle button for showing all reports -->
-        <div class="toggle-container">
-            <button id="toggleFilter" onclick="toggleReports()">Show All Reports</button>
-        </div>
-        
         <div class="loading" id="loadingMessage">Loading reports</div>
         <div id="reportsList"></div>
+
+        <!-- Toggle button for showing all reports, below them with a line above -->
+        <div class="toggle-container" style="display:none">
+            <button id="toggleFilter" onclick="toggleReports()">Show All Reports</button>
+        </div>
     </div>
     
     <!-- Load the auto-list script -->

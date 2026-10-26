@@ -1,0 +1,2 @@
+Model,Accuracy,ROC_AUC,F1_Score,Precision,Recall,GMean,Training_Time_Seconds,Balanced_Accuracy,Lift_Over_Baseline
+rbf,0.9453,0.9891,0.9387,0.9437,0.9338,0.9441,155.67,0.9442,0.4442

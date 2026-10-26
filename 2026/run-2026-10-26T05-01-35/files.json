@@ -1,0 +1,13 @@
+{
+  "files": [
+    "README.md",
+    "confusion_matrices.png",
+    "metrics_dashboard.png",
+    "model-options.csv",
+    "model_performance_report_no_smote.csv",
+    "model_performance_report_smote.csv",
+    "parameters.yaml",
+    "roc_curves_comparison.png",
+    "training_time_comparison.png"
+  ]
+}

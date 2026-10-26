@@ -1,0 +1,7 @@
+folder: blinks1
+features:
+  data: blinks
+  path: https://raw.githubusercontent.com/ModelEarth/realitystream/main/models/random-bits-forest/blinks-input.csv
+  target_column: y
+models:
+- rbf
